@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+     const string = "Prius,2017,red,automatic,y,y,y,n,n,y,10000#Ionic,2020,blue,automatic,y,y,y,y,y,y,13000#Audi,2013,gray,manual,y,y,n,n,n,n,7500#Golf,1995,black,manual,n,n,n,n,n,n,2100#Kia,2007,white,automatic,n,y,n,n,n,n,5300#Mercedes,1998,silver,automatic,y,y,y,n,n,n,8600";
+const cars=formatCars(SortCars(getTotalprice(ReturnArray(parseCarsInfo(string)))));
+console.log(cars);
+function parseCarsInfo(fullString) {
+  const result = fullString.split('#');
+  var array= result.map(carString => {
+    const fields = carString.split(',');
+    return {
+      type: fields[0],
+      model: fields[1],
+      color: fields[2],
+      transmission: fields[3],
+       ac: fields[4] ,
+      electricwindows: fields[5],
+       electricmirros: fields[6],
+        sunroof: fields[7],
+        autopark:fields[8],
+        cruisecontrol:fields[9],
+        price:fields[10],
+        totalprice:''
+
+        
+    };
+  })
+  return array;
+ }
+ function ReturnArray(cars){
+return cars.map(car=> {
+ if(car.ac=='y'){
+ car.ac= car.price *(5/100);
+}else{
+car.ac= 0;
+}
+ if(car.electricwindows=='y'){
+ car.electricwindows=car.price *(8/100);
+}else{
+car.electricwindows=0;
+}
+ if(car.electricmirros=='y'){
+ car.electricmirros=car.price *(6/100);
+}else{
+car.electricmirros=0;
+}
+  if(car.sunroof=='y'){
+ car.sunroof=car.price *(7/100);
+}else{
+car.sunroof=0;
+}
+   if(car.autopark=='y'){
+ car.autopark=car.price *(5/100);
+}else{
+car.autopark=0;
+}
+   if(car.cruisecontrol=='y'){
+ car.cruisecontrol=car.price *(4/100);
+}else{
+car.cruisecontrol=0;
+}
+if(car.transmission=='manual'){
+car.transmission=0;
+}else{
+car.transmission=car.price *(3/100);
+}
+return car;
+ });
+ }
+ function getTotalprice(cars){
+ return cars.map(car =>{
+ car.totalprice= +car.price + +car.ac + +car.autopark + +car.cruisecontrol + + car.electricmirros + + car.electricwindows  + +car.transmission ;
+ car.totalprice+=getModel(car.model)*car.price;
+ return car;
+ });
+ }
+ 
+ function SortCars(cars){
+ return cars.sort((a,b) =>{
+  return  b.totalprice -a.totalprice;
+ });
+ }
+ 
+ function formatCars(cars){
+ return cars.map(car =>{
+ //var res=parseCarsInfo(string);
+ //console.log(res);
+ return `Type:${car.type} \n`+
+ `Model: ${car.model}\n`+
+ `Color: ${car.color} \n`+
+ `Transmission: ${car.transmission==0 ?'manual':'automatic'} \n`+
+ `Features: \n`+
+ `AC: ${car.ac==0?'No':'yes'} \n`+
+ `Electric Windows: ${car.electricwindows==0?'No':'yes'} \n`+
+ `Electric Mirrors:${car.electricmirros==0?'No':'yes'} \n`+
+ `Sunroof: ${car.sunroof==0?'No':'yes'} \n`+
+ `Auto-park:${car.autopark==0?'No':'yes'} \n`+
+ `Cruise Control:${car.cruisecontrol==0?'No':'yes'} \n`+
+ `Total Price:${car.totalprice} \n` +
+ ` .....................................\n`
+ 
+ });
+ }
+ function getModel(model) {
+	if (model >= 2015) {
+      return 0.1;
+    } else if (model <= 2014 && model >= 2010) {
+      return 0.08;
+    } else if (model <= 2009 && model >= 2005) {
+      return 0.06;
+    } else if (model <= 2004 && model >= 2000) {
+      return 0.04;
+    } else if (model <= 1999) {
+      return 0.02;
+    }
+}
+ 
+    </script>
+</body>
+</html>
